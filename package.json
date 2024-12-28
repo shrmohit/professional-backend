@@ -6,6 +6,11 @@
   "scripts": {
     "dev":"nodemon src/index.js"
   },
+  "keywords": [
+    "javascript",
+    "backend",
+    "chai"
+  ],
   "author": "Mohit Sharma",
   "license": "ISC",
   "description": ""
