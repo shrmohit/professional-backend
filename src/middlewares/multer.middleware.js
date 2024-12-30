@@ -12,3 +12,6 @@ const storage = multer.diskStorage({
 export const upload = multer({ storage });
 
 //cb -> callback
+// url -> uniform resource locator
+// uri -> identifer
+// urn -> name
