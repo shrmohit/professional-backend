@@ -1,6 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { User } from "../models/user.model.js ";
+import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   //check if user already exists:username,email
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -29,22 +29,24 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   //check for image,check for avatar
 
-  const avatarLocalPath = req.files?.avatar[0].path;
-  const coverImagePath = req.files?.coverImage[0].path;
+  const avatarLocalPath = req.files?.avatar?.[0]?.path;
+  const coverImagePath = req.files?.coverImage?.[0]?.path;
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar files is required");
   }
   //upload them to cloudinary ,avatar
   const avatar = await uploadOnCloudinary(avatarLocalPath);
-  const coverImage = await uploadOnCloudinary(coverImagePath);
+  const coverImage = coverImagePath
+    ? await uploadOnCloudinary(coverImagePath)
+    : null;
 
   if (!avatar) {
     throw new ApiError(400, "Avatar files is required");
   }
   //create user object -create entry in db
   //  -> user baat karna hai db se
-  const User = await User.create({
+  const newUser = await User.create({
     fullname,
     avatar: avatar.url,
     coverImage: coverImage?.url || "",

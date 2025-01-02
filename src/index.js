@@ -8,7 +8,9 @@ import { DB_NAME } from "../src/constants.js";
 import connectdb from "./db/index.js";
 import { app } from "./app.js";
 
-dotenv.config();
+dotenv.config({
+  path: "./.env",
+});
 
 connectdb()
   .then(() => {
